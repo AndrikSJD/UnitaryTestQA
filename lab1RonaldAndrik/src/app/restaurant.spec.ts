@@ -1,3 +1,4 @@
+import { Entree } from './entree';
 import { Food } from './food';
 import { Restaurant } from './restaurant';
 import { SortedListOfImmutables } from './sorted-list-of-immutables';
@@ -46,5 +47,48 @@ describe('Testing restaurant to add shipment to inventory', () => {
     foodList.add(new Food("Egg", 47, 89, "Egg.jpg"))
     expect(restaurant.addShipmentToInventory(foodList)).toEqual(false);
   });
+});
 
+
+
+//Prueba: crear una orden con un pedido en especifico
+describe('Testing restaurant to place a new order', () => {
+    let restaurant: any;
+    let foodList: SortedListOfImmutables;
+    let entree: Entree;
+  
+//Este es ejucutado antes de cada prueba
+//Se crea un nuevo restaurante y una nueva lista de comida
+    beforeEach(() => {
+      restaurant = new Restaurant("Andriks", 10000);
+      foodList = new SortedListOfImmutables(null);
+      foodList.add(new Food("Egg", 47, 89, "Egg.jpg"),)
+      entree = new Entree("Egg", foodList);
+    });
+
+//Prueba #3 verifica si el restaurante puede 
+//realizar un pedido correctamente cuando el Entree 
+//necesario para la orden está disponible en el inventario.
+//Si el restaurante puede realizar el pedido con éxito, se espera que placeOrder devuelva true.
+    it('debería realizar el pedido si el inventario está disponible', () => {
+      restaurant.addShipmentToInventory(foodList)
+      expect(restaurant.placeOrder(entree)).toBeTrue();
+    });
+
+//Se ejecuta despues de cada prueba
+//Se elimina el restaurante y la lista de comida
+    afterEach(() => {
+      restaurant = null;
+      foodList.removeList(foodList);
+    });
+
+//Prueba #4 verifica si cantidad de efectivo del restaurante aumenta correctamente 
+//después de realizar un pedido. Después de realizar un pedido, se espera que 
+//la cantidad de efectivo en el restaurante sea mayor que antes de realizar el pedido.
+    it('debería aumentar la cantidad de efectivo después de realizar un pedido', () => {
+      restaurant.addShipmentToInventory(foodList)
+      let initialCash = restaurant.getCash();
+      restaurant.placeOrder(entree);
+      expect(restaurant.getCash()).toBeGreaterThan(initialCash);
+    });
 });
